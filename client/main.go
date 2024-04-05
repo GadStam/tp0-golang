@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"client/globals"
 	"client/utils"
 	"log"
+	"os"
 )
 
 func main() {
@@ -25,7 +27,9 @@ func main() {
 
 	// leer de la consola el mensaje
 	// utils.LeerConsola()
-
+	reader := bufio.NewReader(os.Stdin)
+	text, _ := reader.ReadString('\n')
+	log.Print(text)
 	// generamos un paquete y lo enviamos al servidor
 	// utils.GenerarYEnviarPaquete()
 }
