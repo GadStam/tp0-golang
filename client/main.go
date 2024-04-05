@@ -6,6 +6,7 @@ import (
 	"client/utils"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -24,12 +25,21 @@ func main() {
 	// ADVERTENCIA: Antes de continuar, tenemos que asegurarnos que el servidor esté corriendo para poder conectarnos a él
 
 	// enviar un mensaje al servidor con el valor de la config
-
+	utils.EnviarMensaje(globals.ClientConfig.Ip, globals.ClientConfig.Puerto, globals.ClientConfig.Mensaje)
 	// leer de la consola el mensaje
 	// utils.LeerConsola()
-	reader := bufio.NewReader(os.Stdin)
-	text, _ := reader.ReadString('\n')
-	log.Print(text)
+	for {
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+		text = strings.TrimSpace(text)
+		log.Print(text)
+
+		if text == "" {
+			log.Println("se ingresó una linea vacía. Saliendo del programa")
+			break
+		}
+	}
 	// generamos un paquete y lo enviamos al servidor
+	utils.GenerarYEnviarPaquete()
 	// utils.GenerarYEnviarPaquete()
 }
