@@ -1,45 +1,34 @@
 package main
 
 import (
-	"bufio"
 	"client/globals"
 	"client/utils"
 	"log"
-	"os"
-	"strings"
 )
 
 func main() {
 	utils.ConfigurarLogger()
 
 	// loggear "Hola soy un log" usando la biblioteca log
-	globals.ClientConfig = utils.IniciarConfiguracion("config.json")
-	log.Println("Soy un Log")
+	log.Println("Hola soy un log")
 
+	globals.ClientConfig = utils.IniciarConfiguracion("config.json")
 	// validar que la config este cargada correctamente
 	if globals.ClientConfig == nil {
-		log.Fatalf("No se pudo cargar la configuración")
+		log.Fatalln("Error al cargar la configuración")
 	}
+
 	// loggeamos el valor de la config
-	log.Println(globals.ClientConfig.Mensaje)
+	log.Printf("Configuración cargada: %+v\n", globals.ClientConfig)
+
 	// ADVERTENCIA: Antes de continuar, tenemos que asegurarnos que el servidor esté corriendo para poder conectarnos a él
 
 	// enviar un mensaje al servidor con el valor de la config
 	utils.EnviarMensaje(globals.ClientConfig.Ip, globals.ClientConfig.Puerto, globals.ClientConfig.Mensaje)
-	// leer de la consola el mensaje
-	// utils.LeerConsola()
-	for {
-		reader := bufio.NewReader(os.Stdin)
-		text, _ := reader.ReadString('\n')
-		text = strings.TrimSpace(text)
-		log.Print(text)
 
-		if text == "" {
-			log.Println("se ingresó una linea vacía. Saliendo del programa")
-			break
-		}
-	}
-	// generamos un paquete y lo enviamos al servidor
-	utils.GenerarYEnviarPaquete()
-	// utils.GenerarYEnviarPaquete()
+	// leer de la consola el mensaje que queremos enviar
+	mensajes := utils.LeerConsola()
+
+	// mandamos el paquetes al servidor
+	utils.GenerarYEnviarPaquete(mensajes)
 }
